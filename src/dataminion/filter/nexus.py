@@ -57,7 +57,7 @@ class Harbour(Filter):
             timestamp = components[2]
             if len(components) > 2:
                 for i in range(3, len(components)):
-                    (key, val) = components[3].split("=")
+                    (key, val) = components[i].split("=")
                     document[key] = val
             document["@timestamp"] = datetime.utcfromtimestamp(float(timestamp)).strftime('%Y-%m-%dT%H:%M:%S.%f+0000')
             metric_parts = metric_composite.split(".") 
