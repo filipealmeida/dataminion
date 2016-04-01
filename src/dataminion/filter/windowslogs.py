@@ -71,6 +71,15 @@ class MouraoMagic(Filter):
                     header_data = csv.reader(cStringIO.StringIO(data["perfmon_msg"])).next()
                     for idx,col in enumerate(header_data):
                         if idx == 0:
+                            try:
+                                offset = int(col.split("(")[3][:-1])
+                                offsetstr = "%02d00" % (abs(offset)/60,)
+                                if offset > 0:
+                                    header_msg["timeoffset"] = "-" + offsetstr
+                                else:
+                                    header_msg["timeoffset"] = "+" + offsetstr
+                            except:
+                                header_msg["timeoffset"] = "+0000";
                             continue
                         col = re.sub('[ .%#:/-]', '', col)
                         (d1, d2, host, metric_group, metric_name) = col.split('\\')
@@ -98,7 +107,11 @@ class MouraoMagic(Filter):
                             metric_document[key] = data[key]
                         values = csv.reader(cStringIO.StringIO(data["perfmon_msg"])).next()
                         if len(values) - 1 == len(headers["components"]):
-                            document["@timestamp"] = datetime.strptime(values[0], '%m/%d/%Y %H:%M:%S.%f').strftime('%Y-%m-%dT%H:%M:%S.%f+0000')
+                            if "timeoffset" in headers:
+                                offset = headers["timeoffset"]
+                            else:
+                                offset = "+0000"
+                            document["@timestamp"] = datetime.strptime(values[0], '%m/%d/%Y %H:%M:%S.%f').strftime('%Y-%m-%dT%H:%M:%S.%f') + offset
                             document["metric_name"] = "all"
                             document["metric_value"] = len(headers["components"])
                             metric_document["@timestamp"] = document["@timestamp"]
