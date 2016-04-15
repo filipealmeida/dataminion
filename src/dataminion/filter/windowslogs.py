@@ -122,8 +122,8 @@ class MouraoMagic(Filter):
                                     metric_document["metric_value"] = value
                                 except:
                                     metric_document["metric_string"] = value
-                                if "resource" in headers:
-                                    document["resource"] = headers["components"][i]["resource"]    
+                                if "resource" in headers["components"][i]:
+                                    #document["resource"] = headers["components"][i]["resource"]    
                                     metric_document["resource"] = headers["components"][i]["resource"]
                                 metric_document["metric_name"] = headers["components"][i]["metric"]
                                 self.send_data(metric_document)

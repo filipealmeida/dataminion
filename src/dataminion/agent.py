@@ -79,6 +79,8 @@ class Serf(Agent):
     def _make_reader_fn(self, node):
         """"""
         #self.logger.info("GOT DATA from input: %s", data)
+        #TODO: Consider try catch block here to handle failure in filter
+        #TODO: Failure, use "discard" directive key to handle info fail 
         def reader_fn(data):
             self.logger.debug("READ DATA %s ||| %s", node, data)
             if "filter" in self._directive[node]:
