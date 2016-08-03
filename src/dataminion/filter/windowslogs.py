@@ -82,7 +82,11 @@ class MouraoMagic(Filter):
                                 header_msg["timeoffset"] = "+0000";
                             continue
                         col = re.sub('[ .%#:/-]', '', col)
-                        (d1, d2, host, metric_group, metric_name) = col.split('\\')
+                        try:
+                            (d1, d2, host, metric_group, metric_name) = col.split('\\')
+                        except:
+                            logger.error("%s file %s has a bad metric in the header: %s", data["hostname"], data["filename"], col)
+                            break
                         metric_name = re.sub('[()]', '', metric_name)
                         resource = ""
                         match = re.search(r'(\w+)\(([a-zA-Z0-9$\]\[._-]+)\)', metric_group, re.I)
