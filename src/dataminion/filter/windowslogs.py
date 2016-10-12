@@ -127,7 +127,7 @@ class MouraoMagic(Filter):
                                 except:
                                     metric_document["metric_string"] = value
                                 if "resource" in headers["components"][i]:
-                                    #document["resource"] = headers["components"][i]["resource"]    
+                                    #document["resource"] = headers["components"][i]["resource"]
                                     metric_document["resource"] = headers["components"][i]["resource"]
                                 metric_document["metric_name"] = headers["components"][i]["metric"]
                                 self.send_data(metric_document)
@@ -217,13 +217,14 @@ class MouraoMagic(Filter):
                             for i in range(0, len(headers["components"])):
                                 if headers["components"][i]["metric"] in self._numeric_fields:
                                     value = int(values[i])
+                                    document[headers["components"][i]["metric"]] = value
                                 elif headers["components"][i]["metric"] == 'date':
                                     document["@timestamp"] = values[i] + "T"
                                 elif headers["components"][i]["metric"] == 'time':
                                     document["@timestamp"] = document["@timestamp"] + values[i] + "Z"
                                 else:
                                     value = values[i]
-                                document[headers["components"][i]["metric"]] = value
+                                    document[headers["components"][i]["metric"]] = value
                                 if "resource" in headers:
                                     document["resource"] = headers["components"][i]["resource"]
                             if 'time_taken' in document:
